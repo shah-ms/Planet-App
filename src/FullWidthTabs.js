@@ -17,6 +17,19 @@ import Paper from '@material-ui/core/Paper';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import IconButton from '@material-ui/core/IconButton';
 import FavoriteIcon from '@material-ui/icons/Favorite';
+import Toolbar from '@material-ui/core/Toolbar';
+
+const useStylesAppBar = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+  title: {
+    flexGrow: 1,
+  },
+}));
 
 const StyledTableCell = withStyles((theme) => ({
     head: {
@@ -91,6 +104,7 @@ export default function FullWidthTabs(props) {
   React.useEffect(() => {
       setPlanets(props.planets)
   }, [props.planets])
+  const appBarClasses = useStylesAppBar();
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -119,6 +133,17 @@ export default function FullWidthTabs(props) {
 
   return (
     <div className={classes.root}>
+      <div className={appBarClasses.root}>
+      <AppBar position="static">
+        <Toolbar>
+          
+          <Typography variant="h6" align="center" className={appBarClasses.title}>
+            PLANETSZY
+          </Typography>
+        </Toolbar>
+      </AppBar>
+    </div>
+
       <AppBar position="static" color="default">
         <Tabs
           value={value}
@@ -129,7 +154,7 @@ export default function FullWidthTabs(props) {
           aria-label="full width tabs example"
         >
           <Tab label="All Planets" {...a11yProps(0)} />
-          <Tab label="Favourite Planets" {...a11yProps(1)} />
+          <Tab label="Favorite Planets" {...a11yProps(1)} />
         </Tabs>
       </AppBar>
       <SwipeableViews
@@ -143,13 +168,13 @@ export default function FullWidthTabs(props) {
                     <TableHead>
                         <TableRow>
                             <StyledTableCell align="center">PLANET NAME</StyledTableCell>
-                            <StyledTableCell align="center">FAVOURITE</StyledTableCell>
+                            <StyledTableCell align="center">MARK AS FAVORITE</StyledTableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {planets.map((planet) => (
                             <StyledTableRow key={planet.id}>
-                            <StyledTableCell component="th" scope="row" align="center">
+                            <StyledTableCell component="th" scope="row" align="center" style={{fontSize: 20}}>
                                 {planet.name}
                             </StyledTableCell>
                             <StyledTableCell align="center">
@@ -174,18 +199,18 @@ export default function FullWidthTabs(props) {
                         <TableHead>
                             <TableRow>
                                 <StyledTableCell align="center">PLANET NAME</StyledTableCell>
-                                <StyledTableCell align="center">PLANET IMAGE</StyledTableCell>
+                                <StyledTableCell align="center">PLANET INFO</StyledTableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
                             {planets.map((planet) => (
                                 planet.isFavourite ? (
                                 <StyledTableRow key={planet.id}>
-                                <StyledTableCell component="th" scope="row" align="center">
+                                <StyledTableCell component="th" scope="row" align="center" style={{fontSize: 20}}>
                                     {planet.name}
                                 </StyledTableCell>
                                 <StyledTableCell component="th" scope="row" align="center">
-                                    Image
+                                    <a href={planet.wiki} target="_blank"><img align="center" width="250px" height="200px" src={planet.image} /> </a>
                                 </StyledTableCell>
                                 </StyledTableRow> ) : ""
                             ))}
