@@ -84,9 +84,13 @@ const useStyles = makeStyles((theme) => ({
 
 export default function FullWidthTabs(props) {
   const classes = useStyles();
+  const [planets, setPlanets] = React.useState(props.planets);
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
   const tableClasses = useStylesTable();
+  React.useEffect(() => {
+      setPlanets(props.planets)
+  }, [props.planets])
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -97,16 +101,19 @@ export default function FullWidthTabs(props) {
   };
 
   const handleFavourite = (e) => {
-      let id = e.target.id;
-      console.log(id);
-      
-      props.planets.map(planet => {
+      let id = e.currentTarget.id;
+      let newPlanetData = planets.map(planet => {
           if(planet.id === id) {
               console.log(planet.isFavourite);
               planet.isFavourite = !planet.isFavourite;
               console.log(planet.isFavourite);
           }
+          return {
+            ...planet
+          }
       })
+
+      setPlanets(newPlanetData)
 
   }
 
@@ -140,7 +147,7 @@ export default function FullWidthTabs(props) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {props.planets.map((planet) => (
+                        {planets.map((planet) => (
                             <StyledTableRow key={planet.id}>
                             <StyledTableCell component="th" scope="row" align="center">
                                 {planet.name}
@@ -148,10 +155,9 @@ export default function FullWidthTabs(props) {
                             <StyledTableCell align="center">
                                 <IconButton color="primary" 
                                             id={planet.id}
+                                            onClick={(e) => handleFavourite(e)}
                                 >
-                                    {planet.isFavourite ? 
-                                        (<FavoriteIcon id={planet.id} onClick={(e) => handleFavourite(e)}/>) 
-                                        : (<FavoriteBorderIcon id={planet.id} onClick={(e) => handleFavourite(e)}/>)}
+                                    {planet.isFavourite ? <FavoriteIcon/> : <FavoriteBorderIcon/>}
                                     
                                 </IconButton>
                             </StyledTableCell>
@@ -172,7 +178,7 @@ export default function FullWidthTabs(props) {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {props.planets.map((planet) => (
+                            {planets.map((planet) => (
                                 planet.isFavourite ? (
                                 <StyledTableRow key={planet.id}>
                                 <StyledTableCell component="th" scope="row" align="center">
